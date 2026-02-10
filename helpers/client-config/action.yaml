@@ -7,26 +7,20 @@ inputs:
     required: false
     default: |
       {
-        "geth": "ethereum/go-ethereum@master",
-        "besu": "hyperledger/besu@main",
-        "reth": "paradigmxyz/reth@main",
+        "geth": "gnosischain/go-ethereum@v1.16.8-gc",
+        "reth": "gnosischain/reth_gnosis@master",
         "nethermind": "NethermindEth/nethermind@master",
-        "erigon": "erigontech/erigon@main",
-        "nimbusel": "status-im/nimbus-eth1@master",
-        "ethrex": "lambdaclass/ethrex@main"
+        "erigon": "erigontech/erigon@main"
       }
   client_images:
     description: 'JSON object containing client docker images in format {"client": "registry:tag", ...}'
     required: false
     default: |
       {
-        "geth": "docker.ethquokkaops.io/dh/ethpandaops/geth:master",
-        "besu": "docker.ethquokkaops.io/dh/ethpandaops/besu:main",
-        "reth": "docker.ethquokkaops.io/dh/ethpandaops/reth:main",
-        "nethermind": "docker.ethquokkaops.io/dh/ethpandaops/nethermind:master",
-        "erigon": "docker.ethquokkaops.io/dh/ethpandaops/erigon:main",
-        "nimbusel": "docker.ethquokkaops.io/dh/ethpandaops/nimbus-eth1:master",
-        "ethrex": "ghcr.io/lambdaclass/ethrex:main"
+        "geth": "ghcr.io/gnosischain/geth:v1.16.8-gc",
+        "reth": "ghcr.io/gnosischain/reth_gnosis:master",
+        "nethermind": "nethermind/nethermind:1.36.0",
+        "erigon": "erigontech/erigon:latest"
       }
   common_client_tag:
     description: 'If provided, this tag will be used for all clients, overriding individual tags/branches'
@@ -39,7 +33,7 @@ inputs:
   hive_version:
     description: 'GitHub repository and tag for hive (repo@tag)'
     required: false
-    default: 'ethereum/hive@master'
+    default: 'gnosischain/hive@master'
 
   goproxy:
     description: 'Go proxy URL for Go-based clients'
@@ -61,12 +55,6 @@ outputs:
   geth_tag:
     description: 'Go-Ethereum tag'
     value: ${{ steps.parse_git.outputs.geth_tag }}
-  besu_repo:
-    description: 'Besu repository'
-    value: ${{ steps.parse_git.outputs.besu_repo }}
-  besu_tag:
-    description: 'Besu tag'
-    value: ${{ steps.parse_git.outputs.besu_tag }}
   reth_repo:
     description: 'Reth repository'
     value: ${{ steps.parse_git.outputs.reth_repo }}
@@ -85,18 +73,6 @@ outputs:
   erigon_tag:
     description: 'Erigon tag'
     value: ${{ steps.parse_git.outputs.erigon_tag }}
-  nimbusel_repo:
-    description: 'Nimbus EL repository'
-    value: ${{ steps.parse_git.outputs.nimbusel_repo }}
-  nimbusel_tag:
-    description: 'Nimbus EL tag'
-    value: ${{ steps.parse_git.outputs.nimbusel_tag }}
-  ethrex_repo:
-    description: 'Ethrex repository'
-    value: ${{ steps.parse_git.outputs.ethrex_repo }}
-  ethrex_tag:
-    description: 'Ethrex tag'
-    value: ${{ steps.parse_git.outputs.ethrex_tag }}
   # Docker images for clients - registry and tag separated
   geth_docker_registry:
     description: 'Go-Ethereum docker registry'
@@ -104,12 +80,6 @@ outputs:
   geth_docker_tag:
     description: 'Go-Ethereum docker tag'
     value: ${{ steps.parse_docker.outputs.geth_docker_tag }}
-  besu_docker_registry:
-    description: 'Besu docker registry'
-    value: ${{ steps.parse_docker.outputs.besu_docker_registry }}
-  besu_docker_tag:
-    description: 'Besu docker tag'
-    value: ${{ steps.parse_docker.outputs.besu_docker_tag }}
   reth_docker_registry:
     description: 'Reth docker registry'
     value: ${{ steps.parse_docker.outputs.reth_docker_registry }}
@@ -128,18 +98,6 @@ outputs:
   erigon_docker_tag:
     description: 'Erigon docker tag'
     value: ${{ steps.parse_docker.outputs.erigon_docker_tag }}
-  nimbusel_docker_registry:
-    description: 'Nimbus EL docker registry'
-    value: ${{ steps.parse_docker.outputs.nimbusel_docker_registry }}
-  nimbusel_docker_tag:
-    description: 'Nimbus EL docker tag'
-    value: ${{ steps.parse_docker.outputs.nimbusel_docker_tag }}
-  ethrex_docker_registry:
-    description: 'Ethrex docker registry'
-    value: ${{ steps.parse_docker.outputs.ethrex_docker_registry }}
-  ethrex_docker_tag:
-    description: 'Ethrex docker tag'
-    value: ${{ steps.parse_docker.outputs.ethrex_docker_tag }}
   # Final client config
   client_config:
     description: 'YAML client configuration for Hive'
@@ -161,7 +119,7 @@ runs:
       shell: bash
       run: |
         # Parse hive repo and tag
-        HIVE_DEFAULT="ethereum/hive@master"
+        HIVE_DEFAULT="gnosischain/hive@master"
         HIVE_VERSION='${{ inputs.hive_version }}'
         echo "hive_repo=$(echo ${HIVE_VERSION:-$HIVE_DEFAULT} | cut -d@ -f1)" >> $GITHUB_OUTPUT
         echo "hive_tag=$(echo ${HIVE_VERSION:-$HIVE_DEFAULT} | cut -d@ -f2)" >> $GITHUB_OUTPUT
@@ -179,13 +137,10 @@ runs:
       run: |
         # Define client configurations
         declare -A CLIENT_DEFAULTS=(
-          ["geth"]="ethereum/go-ethereum@master"
-          ["besu"]="hyperledger/besu@main"
-          ["reth"]="paradigmxyz/reth@main"
+          ["geth"]="gnosischain/go-ethereum@v1.16.8-gc"
+          ["reth"]="gnosischain/reth_gnosis@master"
           ["nethermind"]="NethermindEth/nethermind@master"
           ["erigon"]="erigontech/erigon@main"
-          ["nimbusel"]="status-im/nimbus-eth1@master"
-          ["ethrex"]="lambdaclass/ethrex@main"
         )
 
         CLIENT_VERSIONS='${{ inputs.client_repos }}'
@@ -215,13 +170,10 @@ runs:
       run: |
         # Define client docker image defaults
         declare -A CLIENT_IMAGE_DEFAULTS=(
-          ["geth"]="docker.ethquokkaops.io/dh/ethpandaops/geth:master"
-          ["besu"]="docker.ethquokkaops.io/dh/ethpandaops/besu:main"
-          ["reth"]="docker.ethquokkaops.io/dh/ethpandaops/reth:main"
-          ["nethermind"]="docker.ethquokkaops.io/dh/ethpandaops/nethermind:master"
-          ["erigon"]="docker.ethquokkaops.io/dh/ethpandaops/erigon:main"
-          ["nimbusel"]="docker.ethquokkaops.io/dh/ethpandaops/nimbus-eth1:master"
-          ["ethrex"]="ghcr.io/lambdaclass/ethrex:main"
+          ["geth"]="ghcr.io/gnosischain/geth:v1.16.8-gc"
+          ["reth"]="ghcr.io/gnosischain/reth_gnosis:master"
+          ["nethermind"]="nethermind/nethermind:1.36.0"
+          ["erigon"]="erigontech/erigon:latest"
         )
 
         CLIENT_IMAGES='${{ inputs.client_images }}'
@@ -249,53 +201,35 @@ runs:
       if: inputs.client_source == 'git'
       shell: bash
       run: |
-        # Generate git client config
+        # Generate git client config for Gnosis clients
         cat << 'EOF' >> $GITHUB_OUTPUT
         config<<ENDCONFIG
-        - client: go-ethereum
+        - client: go-ethereum-gnosis
           nametag: default
           dockerfile: git
           build_args:
             github: ${{ steps.parse_git.outputs.geth_repo }}
             tag: ${{ steps.parse_git.outputs.geth_tag }}
             GOPROXY: ${{ inputs.goproxy }}
-        - client: besu
-          nametag: default
-          dockerfile: git
-          build_args:
-            github: ${{ steps.parse_git.outputs.besu_repo }}
-            tag: ${{ steps.parse_git.outputs.besu_tag }}
-        - client: reth
+        - client: reth-gnosis
           nametag: default
           dockerfile: git
           build_args:
             github: ${{ steps.parse_git.outputs.reth_repo }}
             tag: ${{ steps.parse_git.outputs.reth_tag }}
-        - client: nethermind
+        - client: nethermind-gnosis
           nametag: default
           dockerfile: git
           build_args:
             github: ${{ steps.parse_git.outputs.nethermind_repo }}
             tag: ${{ steps.parse_git.outputs.nethermind_tag }}
-        - client: erigon
+        - client: erigon-gnosis
           nametag: default
           dockerfile: git
           build_args:
             github: ${{ steps.parse_git.outputs.erigon_repo }}
             tag: ${{ steps.parse_git.outputs.erigon_tag }}
             GOPROXY: ${{ inputs.goproxy }}
-        - client: nimbus-el
-          nametag: default
-          dockerfile: git
-          build_args:
-            github: ${{ steps.parse_git.outputs.nimbusel_repo }}
-            tag: ${{ steps.parse_git.outputs.nimbusel_tag }}
-        - client: ethrex
-          nametag: default
-          dockerfile: git
-          build_args:
-            github: ${{ steps.parse_git.outputs.ethrex_repo }}
-            tag: ${{ steps.parse_git.outputs.ethrex_tag }}
         ENDCONFIG
         EOF
 
@@ -303,44 +237,29 @@ runs:
       if: inputs.client_source == 'docker'
       shell: bash
       run: |
-        # Generate docker client config
+        # Generate docker client config for Gnosis clients
         cat << 'EOF' >> $GITHUB_OUTPUT
         config<<ENDCONFIG
-        - client: go-ethereum
+        - client: go-ethereum-gnosis
           nametag: default
           build_args:
             baseimage: ${{ steps.parse_docker.outputs.geth_docker_registry }}
             tag: ${{ steps.parse_docker.outputs.geth_docker_tag }}
-        - client: besu
-          nametag: default
-          build_args:
-            baseimage: ${{ steps.parse_docker.outputs.besu_docker_registry }}
-            tag: ${{ steps.parse_docker.outputs.besu_docker_tag }}
-        - client: reth
+        - client: reth-gnosis
           nametag: default
           build_args:
             baseimage: ${{ steps.parse_docker.outputs.reth_docker_registry }}
             tag: ${{ steps.parse_docker.outputs.reth_docker_tag }}
-        - client: nethermind
+        - client: nethermind-gnosis
           nametag: default
           build_args:
             baseimage: ${{ steps.parse_docker.outputs.nethermind_docker_registry }}
             tag: ${{ steps.parse_docker.outputs.nethermind_docker_tag }}
-        - client: erigon
+        - client: erigon-gnosis
           nametag: default
           build_args:
             baseimage: ${{ steps.parse_docker.outputs.erigon_docker_registry }}
             tag: ${{ steps.parse_docker.outputs.erigon_docker_tag }}
-        - client: nimbus-el
-          nametag: default
-          build_args:
-            baseimage: ${{ steps.parse_docker.outputs.nimbusel_docker_registry }}
-            tag: ${{ steps.parse_docker.outputs.nimbusel_docker_tag }}
-        - client: ethrex
-          nametag: default
-          build_args:
-            baseimage: ${{ steps.parse_docker.outputs.ethrex_docker_registry }}
-            tag: ${{ steps.parse_docker.outputs.ethrex_docker_tag }}
         ENDCONFIG
         EOF
 
