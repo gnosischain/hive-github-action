@@ -17,6 +17,6 @@ jobs:
       - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
       - uses: ./
         with:
-          client: go-ethereum
-          simulator: ethereum/sync
+          client: nethermind-gnosis
+          simulator: gnosis/sync
           workflow_artifact_upload: true
