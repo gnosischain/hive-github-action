@@ -10,7 +10,7 @@ jobs:
   run:
     runs-on: self-hosted
     steps:
-      - uses: ethpandaops/hive-github-action/helpers/self-hosted-runner-dependencies@v0.2.0
+      - uses: gnosischain/hive-github-action/helpers/self-hosted-runner-dependencies@master
         if: runner.environment != 'github-hosted'
 
 ```

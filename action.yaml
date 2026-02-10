@@ -1,5 +1,5 @@
-name: Ethereum Hive
-description: Run Ethereum Hive tests with a given client and simulator
+name: Gnosis Hive
+description: Run Gnosis Hive tests with a given client and simulator
 branding:
   icon: 'align-justify'
   color: 'orange'
@@ -7,13 +7,13 @@ branding:
 inputs:
   # Test configuration
   simulator:
-    description: 'Simulator to run (e.g. ethereum/sync)'
+    description: 'Simulator to run (e.g. gnosis/sync)'
     required: true
-    default: 'ethereum/sync'
+    default: 'gnosis/sync'
   client:
     description: 'Client to test'
     required: true
-    default: 'go-ethereum'
+    default: 'nethermind-gnosis'
   client_config:
     description: 'Client configuration in YAML format'
     required: false
@@ -28,7 +28,7 @@ inputs:
   hive_repository:
     description: 'Hive repository to use'
     required: false
-    default: 'ethereum/hive'
+    default: 'gnosischain/hive'
   hive_version:
     description: 'Hive version/branch to use'
     required: false
