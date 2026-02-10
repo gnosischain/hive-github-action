@@ -1,6 +1,6 @@
 # Gnosis Hive 🐝 Github Action
 
-This action is a wrapper around [Gnosis Hive](https://github.com/gnosischain/hive). It allows you to run tests with different clients and simulators. It also supports uploading test results to S3 and/or as a workflow artifact.
+This action is a wrapper around [Gnosis Hive](https://github.com/gnosischain/hive). It allows you to run tests with different clients and simulators. It also supports uploading test results to GCS (Google Cloud Storage) and/or as a workflow artifact.
 
 > ⚠️ **Note:** This action is still under development and may introduce breaking changes. If you want to use it in your workflows, make sure to reference to a specific commit hash or tag/release.
 
@@ -25,20 +25,20 @@ This action is a wrapper around [Gnosis Hive](https://github.com/gnosischain/hiv
 | `go_version` | Go version used to build hive | No | `1.24` |
 | `docker_version` | Docker version to use | No | `latest` |
 
-### S3 Upload Configuration
+### GCS Upload Configuration
 
 | Input | Description | Required | Default |
 |-------|-------------|----------|---------|
-| `s3_upload` | Upload test results to S3 | No | `false` |
-| `s3_bucket` | S3 bucket name | No* | - |
-| `s3_path` | Path prefix in S3 bucket | No | `hive-results` |
+| `gcs_upload` | Upload test results to GCS | No | `false` |
+| `gcs_bucket` | GCS bucket name | No* | - |
+| `gcs_path` | Path prefix in GCS bucket | No | `''` |
 | `rclone_version` | Rclone version to use | No | `latest` |
 | `rclone_config` | Base64 encoded rclone config file | No | - |
-| `website_upload` | Upload Hive View website | No | `true` |
+| `website_upload` | Upload Hive View website to GCS | No | `true` |
 | `website_listing_limit` | The amount of listings to generate for the website index | No | `2000` |
 | `website_index_generation` | (Re)generate the test results index for the website | No | `true` |
 
-*Required if `s3_upload` is `true`
+*Required if `gcs_upload` is `true`
 
 ### GitHub Workflow Artifact Configuration
 
@@ -83,25 +83,25 @@ Then you can use the `CLIENT_CONFIG` environment variable in your workflow.
     client_config: ${{ env.CLIENT_CONFIG }}
 ```
 
-### Uploading the results directory to S3
+### Uploading the results directory to GCS
 
-You'll need to create an rclone config and base64 encode it. Then store it as a github actions secret on your repository.
+You'll need to create an rclone config for Google Cloud Storage and base64 encode it. Then store it as a GitHub Actions secret on your repository.
 
-An example rclone config could look like this:
+An example rclone config for GCS could look like this:
 
 ```toml
 # Content of rclone.conf
-[s3]
-type = s3
-provider = Cloudflare
-region = auto
-endpoint = https://your-r2-account-id.r2.cloudflarestorage.com
-access_key_id = your-access-key-id
-secret_access_key = your-secret-access-key
-no_check_bucket = true
+[gcs]
+type = google cloud storage
+project_number = my-gcp-project
+service_account_file = /tmp/gcs_service_account.json
+object_acl = private
+bucket_acl = private
+bucket-policy_only = false
+location = us-central1
 ```
 
-Then you can run `base64 -w 0 rclone.conf` and store the output as a github actions secret.
+Then you can run `base64 -w 0 rclone.conf` (or `base64 -i rclone.conf` on macOS) and store the output as a GitHub Actions secret.
 
 Afterwards you just need to reference the secret for the `rclone_config` input.
 
@@ -111,9 +111,9 @@ Afterwards you just need to reference the secret for the `rclone_config` input.
     client: nethermind-gnosis
     simulator: gnosis/sync
     client_config: ${{ env.CLIENT_CONFIG }}
-    s3_upload: true
-    s3_bucket: my-bucket
-    s3_path: my-path
+    gcs_upload: true
+    gcs_bucket: my-bucket
+    gcs_path: my-path
     rclone_config: ${{ secrets.RCLONE_CONFIG }}
 ```
 
@@ -124,9 +124,9 @@ Afterwards you just need to reference the secret for the `rclone_config` input.
   with:
     website_upload: true # This is required to upload the website
     skip_tests: true # This is required to skip the tests
-    s3_upload: true
-    s3_bucket: my-bucket
-    s3_path: my-path
+    gcs_upload: true
+    gcs_bucket: my-bucket
+    gcs_path: my-path
     rclone_config: ${{ secrets.RCLONE_CONFIG }}
 ```
 
