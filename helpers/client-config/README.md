@@ -10,18 +10,16 @@ This composite action generates Hive client configuration based on input paramet
   with:
     client_repos: |
       {
-        "geth": "ethereum/go-ethereum@master",
-        "besu": "hyperledger/besu@main",
-        "reth": "paradigmxyz/reth@main"
+        "geth": "gnosischain/go-ethereum@v1.16.8-gc",
+        "reth": "gnosischain/reth_gnosis@master"
       }
     client_images: |
       {
-        "geth": "ethpandaops/geth:master",
-        "besu": "ethpandaops/besu:main"
-        "reth": "ethpandaops/reth:main"
+        "geth": "ghcr.io/gnosischain/geth:v1.16.8-gc",
+        "reth": "ghcr.io/gnosischain/reth_gnosis:master"
       }
     client_source: 'git'
-    hive_version: 'ethereum/hive@master'
+    hive_version: 'gnosischain/hive@master'
 ```
 
 ## Inputs
@@ -32,7 +30,7 @@ This composite action generates Hive client configuration based on input paramet
 | `client_images` | JSON object containing client docker images in format `{"client": "registry:tag", ...}` | No | Default images for all clients |
 | `common_client_tag` | If provided, this tag will be used for all clients, overriding individual tags/branches | No | `''` |
 | `client_source` | How client images should be sourced (`git` or `docker`) | Yes | `git` |
-| `hive_version` | GitHub repository and tag for hive (`repo@tag`) | No | `ethereum/hive@master` |
+| `hive_version` | GitHub repository and tag for hive (`repo@tag`) | No | `gnosischain/hive@master` |
 | `goproxy` | Go proxy URL for Go-based clients | No | `''` |
 
 ## Outputs
@@ -43,21 +41,15 @@ This composite action generates Hive client configuration based on input paramet
 
 ### Git Client Versions
 - `geth_repo`, `geth_tag`: Go-Ethereum repository and tag
-- `besu_repo`, `besu_tag`: Besu repository and tag
 - `reth_repo`, `reth_tag`: Reth repository and tag
 - `nethermind_repo`, `nethermind_tag`: Nethermind repository and tag
 - `erigon_repo`, `erigon_tag`: Erigon repository and tag
-- `nimbusel_repo`, `nimbusel_tag`: Nimbus EL repository and tag
-- `ethrex_repo`, `ethrex_tag`: Ethrex repository and tag
 
 ### Docker Client Images
 - `geth_docker_registry`, `geth_docker_tag`: Go-Ethereum docker registry and tag
-- `besu_docker_registry`, `besu_docker_tag`: Besu docker registry and tag
 - `reth_docker_registry`, `reth_docker_tag`: Reth docker registry and tag
 - `nethermind_docker_registry`, `nethermind_docker_tag`: Nethermind docker registry and tag
 - `erigon_docker_registry`, `erigon_docker_tag`: Erigon docker registry and tag
-- `nimbusel_docker_registry`, `nimbusel_docker_tag`: Nimbus EL docker registry and tag
-- `ethrex_docker_registry`, `ethrex_docker_tag`: Ethrex docker registry and tag
 
 ### Final Configuration
 - `client_config`: YAML client configuration for Hive
@@ -71,10 +63,7 @@ This composite action generates Hive client configuration based on input paramet
 
 ## Supported Clients
 
-- `geth` (Go-Ethereum)
-- `besu` (Hyperledger Besu)
-- `reth` (Paradigm Reth)
+- `geth` (Go-Ethereum) — [gnosischain/go-ethereum](https://github.com/gnosischain/go-ethereum)
+- `reth` (Reth) — [gnosischain/reth_gnosis](https://github.com/gnosischain/reth_gnosis)
 - `nethermind` (Nethermind)
 - `erigon` (Erigon)
-- `nimbusel` (Nimbus EL)
-- `ethrex` (Ethrex)
