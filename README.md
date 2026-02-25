@@ -32,6 +32,7 @@ This action is a wrapper around [Gnosis Hive](https://github.com/gnosischain/hiv
 | `gcs_upload` | Upload test results to GCS | No | `false` |
 | `gcs_bucket` | GCS bucket name | No* | - |
 | `gcs_path` | Path prefix in GCS bucket | No | `''` |
+| `gcs_public_url` | Public URL prefix for Hive UI. Used to generate links to detailed results in the summary. | No | `''` |
 | `rclone_version` | Rclone version to use | No | `latest` |
 | `rclone_config` | Base64 encoded rclone config file | No | - |
 | `website_upload` | Upload Hive View website to GCS | No | `true` |
@@ -87,17 +88,16 @@ Then you can use the `CLIENT_CONFIG` environment variable in your workflow.
 
 You'll need to create an rclone config for Google Cloud Storage and base64 encode it. Then store it as a GitHub Actions secret on your repository.
 
-An example rclone config for GCS could look like this:
+An example rclone config for GCS using inline service account credentials:
 
 ```toml
 # Content of rclone.conf
 [gcs]
 type = google cloud storage
 project_number = my-gcp-project
-service_account_file = /tmp/gcs_service_account.json
+service_account_credentials = {"type":"service_account","project_id":"...","private_key":"...","client_email":"...","...":"..."}
 object_acl = private
 bucket_acl = private
-bucket-policy_only = false
 location = us-central1
 ```
 

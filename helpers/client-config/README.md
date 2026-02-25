@@ -26,7 +26,7 @@ This composite action generates Hive client configuration based on input paramet
 
 | Input | Description | Required | Default |
 |-------|-------------|----------|---------|
-| `client_versions` | JSON object containing client versions in format `{"client": "repo@tag", ...}` | No | Default versions for all clients |
+| `client_repos` | JSON object containing client versions in format `{"client": "repo@tag", ...}` | No | Default versions for all clients |
 | `client_images` | JSON object containing client docker images in format `{"client": "registry:tag", ...}` | No | Default images for all clients |
 | `common_client_tag` | If provided, this tag will be used for all clients, overriding individual tags/branches | No | `''` |
 | `client_source` | How client images should be sourced (`git` or `docker`) | Yes | `git` |
