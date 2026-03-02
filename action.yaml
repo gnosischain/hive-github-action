@@ -1,5 +1,5 @@
-name: Ethereum Hive
-description: Run Ethereum Hive tests with a given client and simulator
+name: Gnosis Hive
+description: Run Gnosis Hive tests with a given client and simulator
 branding:
   icon: 'align-justify'
   color: 'orange'
@@ -7,13 +7,13 @@ branding:
 inputs:
   # Test configuration
   simulator:
-    description: 'Simulator to run (e.g. ethereum/sync)'
+    description: 'Simulator to run (e.g. gnosis/sync)'
     required: true
-    default: 'ethereum/sync'
+    default: 'gnosis/sync'
   client:
     description: 'Client to test'
     required: true
-    default: 'go-ethereum'
+    default: 'nethermind-gnosis'
   client_config:
     description: 'Client configuration in YAML format'
     required: false
@@ -28,7 +28,7 @@ inputs:
   hive_repository:
     description: 'Hive repository to use'
     required: false
-    default: 'ethereum/hive'
+    default: 'gnosischain/hive'
   hive_version:
     description: 'Hive version/branch to use'
     required: false
@@ -41,32 +41,32 @@ inputs:
     description: 'Docker version to use'
     required: false
     default: 'latest'
-  ## S3 upload using rclone
-  s3_upload:
-    description: 'Upload test results to S3'
+  ## GCS upload using rclone
+  gcs_upload:
+    description: 'Upload test results to GCS'
     required: false
     default: 'false'
-  s3_bucket:
-    description: 'S3 bucket name'
+  gcs_bucket:
+    description: 'GCS bucket name'
     required: false
-  s3_path:
-    description: 'Path prefix in S3 bucket'
+  gcs_path:
+    description: 'Path prefix in GCS bucket'
     required: false
     default: ''
-  s3_public_url:
+  gcs_public_url:
     description: 'Public URL prefix for Hive UI. Used to generate links to detailed results in the summary.'
     required: false
     default: ''
   rclone_config:
     description: 'Rclone config file'
     required: false
-    default: '' # Should be base64 encoded. Example: base64 -w 0 rclone.conf
+    default: '' # Should be base64 encoded.
   rclone_version:
     description: 'Rclone version to use'
     required: false
     default: 'latest'
   website_upload:
-    description: 'Upload Hive View website to S3'
+    description: 'Upload Hive View website to GCS'
     required: false
     default: 'true'
   website_listing_limit:
@@ -190,23 +190,23 @@ runs:
         name: ${{ env.WORKFLOW_ARTIFACT_PREFIX }}-client-config.yaml
         path: src/client-config.yaml
 
-    - name: Setup Rclone for S3 upload
-      if: ${{ inputs.s3_upload == 'true' && env.RUN_SUCCESS == 'true' }}
+    - name: Setup Rclone for GCS upload
+      if: ${{ inputs.gcs_upload == 'true' && env.RUN_SUCCESS == 'true' }}
       uses: AnimMouse/setup-rclone@0d99fa3878a334d3e307c1a8372ad55550fdaea7 # v1.11.0
       with:
         rclone_config: ${{ inputs.rclone_config }}
         version: ${{ inputs.rclone_version }}
 
-    - name: Upload results to S3
-      if: ${{ inputs.s3_upload == 'true' && env.RUN_SUCCESS == 'true' && inputs.skip_tests != 'true' }}
+    - name: Upload results to GCS
+      if: ${{ inputs.gcs_upload == 'true' && env.RUN_SUCCESS == 'true' && inputs.skip_tests != 'true' }}
       shell: bash
       run: |
-        rclone copy --no-traverse --exclude "hive.json" src/results s3:${{ inputs.s3_bucket }}/${{ inputs.s3_path }}/results
+        rclone copy --no-traverse --exclude "hive.json" src/results gcs:${{ inputs.gcs_bucket }}/${{ inputs.gcs_path }}/results
 
-    - name: Generate hive view website assets and upload to S3
+    - name: Generate hive view website assets and upload to GCS
       if: >-
         ${{
-          inputs.s3_upload == 'true' &&
+          inputs.gcs_upload == 'true' &&
           inputs.website_upload == 'true' &&
           env.RUN_SUCCESS == 'true'
         }}
@@ -215,26 +215,26 @@ runs:
       run: |
         echo "Deploying hive view"
         ./hiveview --deploy hive-www
-        echo "Uploading hive view to S3"
-        rclone copy --no-traverse hive-www s3:${{ inputs.s3_bucket }}/${{ inputs.s3_path }}
+        echo "Uploading hive view to GCS"
+        rclone copy --no-traverse hive-www gcs:${{ inputs.gcs_bucket }}/${{ inputs.gcs_path }}
 
-    - name: Update hive view index and upload to S3
+    - name: Update hive view index and upload to GCS
       if: >-
         ${{
-          inputs.s3_upload == 'true' &&
+          inputs.gcs_upload == 'true' &&
           env.RUN_SUCCESS == 'true' &&
           inputs.website_index_generation == 'true'
         }}
       working-directory: ./src
       shell: bash
       run: |
-        echo "Fetching results from S3"
-        rclone copy --progress --transfers=100 --include "*.json" s3://${{ inputs.s3_bucket }}/${{ inputs.s3_path }}/results tmp_results
+        echo "Fetching results from GCS"
+        rclone copy --progress --transfers=100 --include "*.json" gcs:${{ inputs.gcs_bucket }}/${{ inputs.gcs_path }}/results tmp_results
         echo "Generate listings file:"
         ./hiveview --listing --limit=${{ inputs.website_listing_limit }} --logdir tmp_results > listing.jsonl
         cat listing.jsonl
-        echo "Upload listings file to S3"
-        rclone copy listing.jsonl s3:${{ inputs.s3_bucket }}/${{ inputs.s3_path }}/
+        echo "Upload listings file to GCS"
+        rclone copy listing.jsonl gcs:${{ inputs.gcs_bucket }}/${{ inputs.gcs_path }}/
 
     - name: Inform that only the website was uploaded
       if: inputs.skip_tests == 'true' && inputs.website_upload == 'true'
@@ -276,7 +276,7 @@ runs:
         ls -lah $GITHUB_ACTION_PATH/
         for json_file in src/results/*.json; do
           if [ -f "$json_file" ] && [[ "$json_file" != *"hive.json" ]]; then
-            $GITHUB_ACTION_PATH/scripts/json-result-to-md-summary.sh "$json_file" "${{ inputs.s3_public_url }}"
+            $GITHUB_ACTION_PATH/scripts/json-result-to-md-summary.sh "$json_file" "${{ inputs.gcs_public_url }}"
             cat "${json_file%.*}.md" >> $GITHUB_STEP_SUMMARY
           fi
         done

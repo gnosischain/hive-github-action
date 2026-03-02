@@ -1,5 +1,7 @@
 # Changelog
 
+> Note: Versions 0.1.0 through 0.6.1 are from the upstream [ethpandaops/hive-github-action](https://github.com/ethpandaops/hive-github-action). This fork has been modified for Gnosis Chain with GCS upload support.
+
 ## [0.6.1](https://github.com/ethpandaops/hive-github-action/compare/v0.6.0...v0.6.1) (2025-12-01)
 
 

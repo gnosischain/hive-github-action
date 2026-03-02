@@ -1,11 +1,6 @@
 name: Test - Custom Config
 on:
-  pull_request:
-    branches:
-      - master
-  push:
-    branches:
-      - master
+  workflow_dispatch:
 
 jobs:
   run:
@@ -17,13 +12,13 @@ jobs:
       - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
       - uses: ./
         with:
-          client: go-ethereum
-          simulator: ethereum/rpc-compat
+          client: nethermind-gnosis
+          simulator: gnosis/rpc-compat
           workflow_artifact_upload: true
           client_config: |
-            - client: go-ethereum
-              nametag: go-ethereum-main
+            - client: nethermind-gnosis
+              nametag: nethermind-gnosis-main
               dockerfile: git
               build_args:
-                github: ethereum/go-ethereum
+                github: NethermindEth/nethermind
                 tag: master

@@ -33,26 +33,20 @@ jobs:
           # Test hive outputs
           echo "Hive repo: ${{ steps.test_git_defaults.outputs.hive_repo }}"
           echo "Hive tag: ${{ steps.test_git_defaults.outputs.hive_tag }}"
-          [[ "${{ steps.test_git_defaults.outputs.hive_repo }}" == "ethereum/hive" ]] || exit 1
+          [[ "${{ steps.test_git_defaults.outputs.hive_repo }}" == "gnosischain/hive" ]] || exit 1
           [[ "${{ steps.test_git_defaults.outputs.hive_tag }}" == "master" ]] || exit 1
 
           # Test geth outputs
           echo "Geth repo: ${{ steps.test_git_defaults.outputs.geth_repo }}"
           echo "Geth tag: ${{ steps.test_git_defaults.outputs.geth_tag }}"
-          [[ "${{ steps.test_git_defaults.outputs.geth_repo }}" == "ethereum/go-ethereum" ]] || exit 1
-          [[ "${{ steps.test_git_defaults.outputs.geth_tag }}" == "master" ]] || exit 1
-
-          # Test besu outputs
-          echo "Besu repo: ${{ steps.test_git_defaults.outputs.besu_repo }}"
-          echo "Besu tag: ${{ steps.test_git_defaults.outputs.besu_tag }}"
-          [[ "${{ steps.test_git_defaults.outputs.besu_repo }}" == "hyperledger/besu" ]] || exit 1
-          [[ "${{ steps.test_git_defaults.outputs.besu_tag }}" == "main" ]] || exit 1
+          [[ "${{ steps.test_git_defaults.outputs.geth_repo }}" == "gnosischain/go-ethereum" ]] || exit 1
+          [[ "${{ steps.test_git_defaults.outputs.geth_tag }}" == "v1.16.8-gc" ]] || exit 1
 
           # Test reth outputs
           echo "Reth repo: ${{ steps.test_git_defaults.outputs.reth_repo }}"
           echo "Reth tag: ${{ steps.test_git_defaults.outputs.reth_tag }}"
-          [[ "${{ steps.test_git_defaults.outputs.reth_repo }}" == "paradigmxyz/reth" ]] || exit 1
-          [[ "${{ steps.test_git_defaults.outputs.reth_tag }}" == "main" ]] || exit 1
+          [[ "${{ steps.test_git_defaults.outputs.reth_repo }}" == "gnosischain/reth_gnosis" ]] || exit 1
+          [[ "${{ steps.test_git_defaults.outputs.reth_tag }}" == "master" ]] || exit 1
 
           echo "✅ Git defaults test passed"
 
@@ -75,14 +69,8 @@ jobs:
           # Test geth docker outputs
           echo "Geth docker registry: ${{ steps.test_docker_defaults.outputs.geth_docker_registry }}"
           echo "Geth docker tag: ${{ steps.test_docker_defaults.outputs.geth_docker_tag }}"
-          [[ "${{ steps.test_docker_defaults.outputs.geth_docker_registry }}" == "docker.ethquokkaops.io/dh/ethpandaops/geth" ]] || exit 1
-          [[ "${{ steps.test_docker_defaults.outputs.geth_docker_tag }}" == "master" ]] || exit 1
-
-          # Test besu docker outputs
-          echo "Besu docker registry: ${{ steps.test_docker_defaults.outputs.besu_docker_registry }}"
-          echo "Besu docker tag: ${{ steps.test_docker_defaults.outputs.besu_docker_tag }}"
-          [[ "${{ steps.test_docker_defaults.outputs.besu_docker_registry }}" == "docker.ethquokkaops.io/dh/ethpandaops/besu" ]] || exit 1
-          [[ "${{ steps.test_docker_defaults.outputs.besu_docker_tag }}" == "main" ]] || exit 1
+          [[ "${{ steps.test_docker_defaults.outputs.geth_docker_registry }}" == "ghcr.io/gnosischain/geth" ]] || exit 1
+          [[ "${{ steps.test_docker_defaults.outputs.geth_docker_tag }}" == "v1.16.8-gc" ]] || exit 1
 
           echo "✅ Docker defaults test passed"
 
@@ -99,11 +87,10 @@ jobs:
           client_source: git
           client_repos: |
             {
-              "geth": "ethereum/go-ethereum@v1.13.0",
-              "besu": "hyperledger/besu@23.7.0",
-              "reth": "paradigmxyz/reth@v0.1.0"
+              "geth": "gnosischain/go-ethereum@v1.16.8-gc",
+              "reth": "gnosischain/reth_gnosis@master"
             }
-          hive_version: "ethereum/hive@v1.10.0"
+          hive_version: "gnosischain/hive@master"
 
       - name: Verify custom git outputs
         run: |
@@ -112,26 +99,20 @@ jobs:
           # Test custom hive version
           echo "Hive repo: ${{ steps.test_custom_git.outputs.hive_repo }}"
           echo "Hive tag: ${{ steps.test_custom_git.outputs.hive_tag }}"
-          [[ "${{ steps.test_custom_git.outputs.hive_repo }}" == "ethereum/hive" ]] || exit 1
-          [[ "${{ steps.test_custom_git.outputs.hive_tag }}" == "v1.10.0" ]] || exit 1
+          [[ "${{ steps.test_custom_git.outputs.hive_repo }}" == "gnosischain/hive" ]] || exit 1
+          [[ "${{ steps.test_custom_git.outputs.hive_tag }}" == "master" ]] || exit 1
 
           # Test custom geth version
           echo "Geth repo: ${{ steps.test_custom_git.outputs.geth_repo }}"
           echo "Geth tag: ${{ steps.test_custom_git.outputs.geth_tag }}"
-          [[ "${{ steps.test_custom_git.outputs.geth_repo }}" == "ethereum/go-ethereum" ]] || exit 1
-          [[ "${{ steps.test_custom_git.outputs.geth_tag }}" == "v1.13.0" ]] || exit 1
-
-          # Test custom besu version
-          echo "Besu repo: ${{ steps.test_custom_git.outputs.besu_repo }}"
-          echo "Besu tag: ${{ steps.test_custom_git.outputs.besu_tag }}"
-          [[ "${{ steps.test_custom_git.outputs.besu_repo }}" == "hyperledger/besu" ]] || exit 1
-          [[ "${{ steps.test_custom_git.outputs.besu_tag }}" == "23.7.0" ]] || exit 1
+          [[ "${{ steps.test_custom_git.outputs.geth_repo }}" == "gnosischain/go-ethereum" ]] || exit 1
+          [[ "${{ steps.test_custom_git.outputs.geth_tag }}" == "v1.16.8-gc" ]] || exit 1
 
           # Test custom reth version
           echo "Reth repo: ${{ steps.test_custom_git.outputs.reth_repo }}"
           echo "Reth tag: ${{ steps.test_custom_git.outputs.reth_tag }}"
-          [[ "${{ steps.test_custom_git.outputs.reth_repo }}" == "paradigmxyz/reth" ]] || exit 1
-          [[ "${{ steps.test_custom_git.outputs.reth_tag }}" == "v0.1.0" ]] || exit 1
+          [[ "${{ steps.test_custom_git.outputs.reth_repo }}" == "gnosischain/reth_gnosis" ]] || exit 1
+          [[ "${{ steps.test_custom_git.outputs.reth_tag }}" == "master" ]] || exit 1
 
           echo "✅ Custom git versions test passed"
 
@@ -148,9 +129,8 @@ jobs:
           client_source: docker
           client_images: |
             {
-              "geth": "ethereum/client-go:v1.13.0",
-              "besu": "hyperledger/besu:23.7.0",
-              "reth": "ghcr.io/paradigmxyz/reth:v0.1.0"
+              "geth": "ghcr.io/gnosischain/geth:v1.16.8-gc",
+              "reth": "ghcr.io/gnosischain/reth_gnosis:master"
             }
 
       - name: Verify custom docker outputs
@@ -160,20 +140,14 @@ jobs:
           # Test custom geth image
           echo "Geth docker registry: ${{ steps.test_custom_docker.outputs.geth_docker_registry }}"
           echo "Geth docker tag: ${{ steps.test_custom_docker.outputs.geth_docker_tag }}"
-          [[ "${{ steps.test_custom_docker.outputs.geth_docker_registry }}" == "ethereum/client-go" ]] || exit 1
-          [[ "${{ steps.test_custom_docker.outputs.geth_docker_tag }}" == "v1.13.0" ]] || exit 1
-
-          # Test custom besu image
-          echo "Besu docker registry: ${{ steps.test_custom_docker.outputs.besu_docker_registry }}"
-          echo "Besu docker tag: ${{ steps.test_custom_docker.outputs.besu_docker_tag }}"
-          [[ "${{ steps.test_custom_docker.outputs.besu_docker_registry }}" == "hyperledger/besu" ]] || exit 1
-          [[ "${{ steps.test_custom_docker.outputs.besu_docker_tag }}" == "23.7.0" ]] || exit 1
+          [[ "${{ steps.test_custom_docker.outputs.geth_docker_registry }}" == "ghcr.io/gnosischain/geth" ]] || exit 1
+          [[ "${{ steps.test_custom_docker.outputs.geth_docker_tag }}" == "v1.16.8-gc" ]] || exit 1
 
           # Test custom reth image
           echo "Reth docker registry: ${{ steps.test_custom_docker.outputs.reth_docker_registry }}"
           echo "Reth docker tag: ${{ steps.test_custom_docker.outputs.reth_docker_tag }}"
-          [[ "${{ steps.test_custom_docker.outputs.reth_docker_registry }}" == "ghcr.io/paradigmxyz/reth" ]] || exit 1
-          [[ "${{ steps.test_custom_docker.outputs.reth_docker_tag }}" == "v0.1.0" ]] || exit 1
+          [[ "${{ steps.test_custom_docker.outputs.reth_docker_registry }}" == "ghcr.io/gnosischain/reth_gnosis" ]] || exit 1
+          [[ "${{ steps.test_custom_docker.outputs.reth_docker_tag }}" == "master" ]] || exit 1
 
           echo "✅ Custom docker images test passed"
 
@@ -191,8 +165,8 @@ jobs:
           common_client_tag: "v2.0.0"
           client_repos: |
             {
-              "geth": "ethereum/go-ethereum@v1.13.0",
-              "besu": "hyperledger/besu@23.7.0"
+              "geth": "gnosischain/go-ethereum@v1.16.8-gc",
+              "reth": "gnosischain/reth_gnosis@master"
             }
 
       - name: Verify common tag override git
@@ -201,15 +175,15 @@ jobs:
 
           # Test that common tag overrides individual tags
           echo "Geth tag: ${{ steps.test_common_tag_git.outputs.geth_tag }}"
-          echo "Besu tag: ${{ steps.test_common_tag_git.outputs.besu_tag }}"
+          echo "Reth tag: ${{ steps.test_common_tag_git.outputs.reth_tag }}"
           [[ "${{ steps.test_common_tag_git.outputs.geth_tag }}" == "v2.0.0" ]] || exit 1
-          [[ "${{ steps.test_common_tag_git.outputs.besu_tag }}" == "v2.0.0" ]] || exit 1
+          [[ "${{ steps.test_common_tag_git.outputs.reth_tag }}" == "v2.0.0" ]] || exit 1
 
-          # Test that repos are still correct
+          # Test that repo is still correct
           echo "Geth repo: ${{ steps.test_common_tag_git.outputs.geth_repo }}"
-          echo "Besu repo: ${{ steps.test_common_tag_git.outputs.besu_repo }}"
-          [[ "${{ steps.test_common_tag_git.outputs.geth_repo }}" == "ethereum/go-ethereum" ]] || exit 1
-          [[ "${{ steps.test_common_tag_git.outputs.besu_repo }}" == "hyperledger/besu" ]] || exit 1
+          echo "Reth repo: ${{ steps.test_common_tag_git.outputs.reth_repo }}"
+          [[ "${{ steps.test_common_tag_git.outputs.geth_repo }}" == "gnosischain/go-ethereum" ]] || exit 1
+          [[ "${{ steps.test_common_tag_git.outputs.reth_repo }}" == "gnosischain/reth_gnosis" ]] || exit 1
 
           echo "✅ Common client tag git test passed"
 
@@ -227,8 +201,8 @@ jobs:
           common_client_tag: "v2.0.0"
           client_images: |
             {
-              "geth": "ethereum/client-go:v1.13.0",
-              "besu": "hyperledger/besu:23.7.0"
+              "geth": "ghcr.io/gnosischain/geth:v1.16.8-gc",
+              "reth": "ghcr.io/gnosischain/reth_gnosis:master"
             }
 
       - name: Verify common tag override docker
@@ -237,16 +211,15 @@ jobs:
 
           # Test that common tag overrides individual tags
           echo "Geth docker tag: ${{ steps.test_common_tag_docker.outputs.geth_docker_tag }}"
-          echo "Besu docker tag: ${{ steps.test_common_tag_docker.outputs.besu_docker_tag }}"
+          echo "Reth docker tag: ${{ steps.test_common_tag_docker.outputs.reth_docker_tag }}"
           [[ "${{ steps.test_common_tag_docker.outputs.geth_docker_tag }}" == "v2.0.0" ]] || exit 1
-          [[ "${{ steps.test_common_tag_docker.outputs.besu_docker_tag }}" == "v2.0.0" ]] || exit 1
+          [[ "${{ steps.test_common_tag_docker.outputs.reth_docker_tag }}" == "v2.0.0" ]] || exit 1
 
-          # Test that registries are still correct
+          # Test that registry is still correct
           echo "Geth docker registry: ${{ steps.test_common_tag_docker.outputs.geth_docker_registry }}"
-          echo "Besu docker registry: ${{ steps.test_common_tag_docker.outputs.besu_docker_registry }}"
-          [[ "${{ steps.test_common_tag_docker.outputs.geth_docker_registry }}" == "ethereum/client-go" ]] || exit 1
-          [[ "${{ steps.test_common_tag_docker.outputs.besu_docker_registry }}" == "hyperledger/besu" ]] || exit 1
-
+          echo "Reth docker registry: ${{ steps.test_common_tag_docker.outputs.reth_docker_registry }}"
+          [[ "${{ steps.test_common_tag_docker.outputs.geth_docker_registry }}" == "ghcr.io/gnosischain/geth" ]] || exit 1
+          [[ "${{ steps.test_common_tag_docker.outputs.reth_docker_registry }}" == "ghcr.io/gnosischain/reth_gnosis" ]] || exit 1
           echo "✅ Common client tag docker test passed"
 
   test-client-config-output-git:
@@ -270,11 +243,11 @@ jobs:
           echo "Client config:"
           echo "${{ steps.test_config_git.outputs.client_config }}"
 
-          # Test that config contains expected elements
-          [[ "${{ steps.test_config_git.outputs.client_config }}" == *"client: go-ethereum"* ]] || exit 1
+          # Test that config contains expected elements for Gnosis clients
+          [[ "${{ steps.test_config_git.outputs.client_config }}" == *"client: go-ethereum-gnosis"* ]] || exit 1
           [[ "${{ steps.test_config_git.outputs.client_config }}" == *"dockerfile: git"* ]] || exit 1
-          [[ "${{ steps.test_config_git.outputs.client_config }}" == *"github: ethereum/go-ethereum"* ]] || exit 1
-          [[ "${{ steps.test_config_git.outputs.client_config }}" == *"tag: master"* ]] || exit 1
+          [[ "${{ steps.test_config_git.outputs.client_config }}" == *"github: gnosischain/go-ethereum"* ]] || exit 1
+          [[ "${{ steps.test_config_git.outputs.client_config }}" == *"tag: v1.16.8-gc"* ]] || exit 1
           [[ "${{ steps.test_config_git.outputs.client_config }}" == *"GOPROXY: https://proxy.golang.org"* ]] || exit 1
 
           echo "✅ Client config git output test passed"
@@ -299,11 +272,11 @@ jobs:
           echo "Client config:"
           echo "${{ steps.test_config_docker.outputs.client_config }}"
 
-          # Test that config contains expected elements
-          [[ "${{ steps.test_config_docker.outputs.client_config }}" == *"client: go-ethereum"* ]] || exit 1
+          # Test that config contains expected elements for Gnosis clients
+          [[ "${{ steps.test_config_docker.outputs.client_config }}" == *"client: go-ethereum-gnosis"* ]] || exit 1
           [[ "${{ steps.test_config_docker.outputs.client_config }}" != *"dockerfile: git"* ]] || exit 1
-          [[ "${{ steps.test_config_docker.outputs.client_config }}" == *"baseimage: docker.ethquokkaops.io/dh/ethpandaops/geth"* ]] || exit 1
-          [[ "${{ steps.test_config_docker.outputs.client_config }}" == *"tag: master"* ]] || exit 1
+          [[ "${{ steps.test_config_docker.outputs.client_config }}" == *"baseimage: ghcr.io/gnosischain/geth"* ]] || exit 1
+          [[ "${{ steps.test_config_docker.outputs.client_config }}" == *"tag: v1.16.8-gc"* ]] || exit 1
 
           echo "✅ Client config docker output test passed"
 
@@ -352,8 +325,8 @@ jobs:
           echo "Raw JSON output:"
           echo "${{ toJson(steps.test_all_clients.outputs) }}"
 
-          # Test all clients have outputs
-          clients=("geth" "besu" "reth" "nethermind" "erigon" "nimbusel", "ethrex")
+          # Test all Gnosis clients have outputs
+          clients=("geth" "reth" "nethermind" "erigon")
 
           for client in "${clients[@]}"; do
             repo_var="${client}_repo"
@@ -368,10 +341,6 @@ jobs:
                 repo_value="${{ steps.test_all_clients.outputs.geth_repo }}"
                 tag_value="${{ steps.test_all_clients.outputs.geth_tag }}"
                 ;;
-              "besu")
-                repo_value="${{ steps.test_all_clients.outputs.besu_repo }}"
-                tag_value="${{ steps.test_all_clients.outputs.besu_tag }}"
-                ;;
               "reth")
                 repo_value="${{ steps.test_all_clients.outputs.reth_repo }}"
                 tag_value="${{ steps.test_all_clients.outputs.reth_tag }}"
@@ -383,14 +352,6 @@ jobs:
               "erigon")
                 repo_value="${{ steps.test_all_clients.outputs.erigon_repo }}"
                 tag_value="${{ steps.test_all_clients.outputs.erigon_tag }}"
-                ;;
-              "nimbusel")
-                repo_value="${{ steps.test_all_clients.outputs.nimbusel_repo }}"
-                tag_value="${{ steps.test_all_clients.outputs.nimbusel_tag }}"
-                ;;
-              "ethrex")
-                repo_value="${{ steps.test_all_clients.outputs.ethrex_repo }}"
-                tag_value="${{ steps.test_all_clients.outputs.ethrex_tag }}"
                 ;;
             esac
 
