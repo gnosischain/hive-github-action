@@ -40,7 +40,7 @@ jobs:
           echo "Geth repo: ${{ steps.test_git_defaults.outputs.geth_repo }}"
           echo "Geth tag: ${{ steps.test_git_defaults.outputs.geth_tag }}"
           [[ "${{ steps.test_git_defaults.outputs.geth_repo }}" == "gnosischain/go-ethereum" ]] || exit 1
-          [[ "${{ steps.test_git_defaults.outputs.geth_tag }}" == "v1.16.8-gc" ]] || exit 1
+          [[ "${{ steps.test_git_defaults.outputs.geth_tag }}" == "release-1.17.1-gc" ]] || exit 1
 
           # Test reth outputs
           echo "Reth repo: ${{ steps.test_git_defaults.outputs.reth_repo }}"
@@ -70,7 +70,7 @@ jobs:
           echo "Geth docker registry: ${{ steps.test_docker_defaults.outputs.geth_docker_registry }}"
           echo "Geth docker tag: ${{ steps.test_docker_defaults.outputs.geth_docker_tag }}"
           [[ "${{ steps.test_docker_defaults.outputs.geth_docker_registry }}" == "ghcr.io/gnosischain/geth" ]] || exit 1
-          [[ "${{ steps.test_docker_defaults.outputs.geth_docker_tag }}" == "v1.16.8-gc" ]] || exit 1
+          [[ "${{ steps.test_docker_defaults.outputs.geth_docker_tag }}" == "latest" ]] || exit 1
 
           echo "✅ Docker defaults test passed"
 
@@ -87,7 +87,7 @@ jobs:
           client_source: git
           client_repos: |
             {
-              "geth": "gnosischain/go-ethereum@v1.16.8-gc",
+              "geth": "gnosischain/go-ethereum@release-1.17.1-gc",
               "reth": "gnosischain/reth_gnosis@master"
             }
           hive_version: "gnosischain/hive@master"
@@ -106,7 +106,7 @@ jobs:
           echo "Geth repo: ${{ steps.test_custom_git.outputs.geth_repo }}"
           echo "Geth tag: ${{ steps.test_custom_git.outputs.geth_tag }}"
           [[ "${{ steps.test_custom_git.outputs.geth_repo }}" == "gnosischain/go-ethereum" ]] || exit 1
-          [[ "${{ steps.test_custom_git.outputs.geth_tag }}" == "v1.16.8-gc" ]] || exit 1
+          [[ "${{ steps.test_custom_git.outputs.geth_tag }}" == "release-1.17.1-gc" ]] || exit 1
 
           # Test custom reth version
           echo "Reth repo: ${{ steps.test_custom_git.outputs.reth_repo }}"
@@ -129,8 +129,8 @@ jobs:
           client_source: docker
           client_images: |
             {
-              "geth": "ghcr.io/gnosischain/geth:v1.16.8-gc",
-              "reth": "ghcr.io/gnosischain/reth_gnosis:master"
+              "geth": "ghcr.io/gnosischain/geth:latest",
+              "reth": "ghcr.io/gnosischain/reth_gnosis:latest"
             }
 
       - name: Verify custom docker outputs
@@ -141,13 +141,13 @@ jobs:
           echo "Geth docker registry: ${{ steps.test_custom_docker.outputs.geth_docker_registry }}"
           echo "Geth docker tag: ${{ steps.test_custom_docker.outputs.geth_docker_tag }}"
           [[ "${{ steps.test_custom_docker.outputs.geth_docker_registry }}" == "ghcr.io/gnosischain/geth" ]] || exit 1
-          [[ "${{ steps.test_custom_docker.outputs.geth_docker_tag }}" == "v1.16.8-gc" ]] || exit 1
+          [[ "${{ steps.test_custom_docker.outputs.geth_docker_tag }}" == "latest" ]] || exit 1
 
           # Test custom reth image
           echo "Reth docker registry: ${{ steps.test_custom_docker.outputs.reth_docker_registry }}"
           echo "Reth docker tag: ${{ steps.test_custom_docker.outputs.reth_docker_tag }}"
           [[ "${{ steps.test_custom_docker.outputs.reth_docker_registry }}" == "ghcr.io/gnosischain/reth_gnosis" ]] || exit 1
-          [[ "${{ steps.test_custom_docker.outputs.reth_docker_tag }}" == "master" ]] || exit 1
+          [[ "${{ steps.test_custom_docker.outputs.reth_docker_tag }}" == "latest" ]] || exit 1
 
           echo "✅ Custom docker images test passed"
 
@@ -165,7 +165,7 @@ jobs:
           common_client_tag: "v2.0.0"
           client_repos: |
             {
-              "geth": "gnosischain/go-ethereum@v1.16.8-gc",
+              "geth": "gnosischain/go-ethereum@release-1.17.1-gc",
               "reth": "gnosischain/reth_gnosis@master"
             }
 
@@ -201,8 +201,8 @@ jobs:
           common_client_tag: "v2.0.0"
           client_images: |
             {
-              "geth": "ghcr.io/gnosischain/geth:v1.16.8-gc",
-              "reth": "ghcr.io/gnosischain/reth_gnosis:master"
+              "geth": "ghcr.io/gnosischain/geth:latest",
+              "reth": "ghcr.io/gnosischain/reth_gnosis:latest"
             }
 
       - name: Verify common tag override docker
@@ -247,7 +247,7 @@ jobs:
           [[ "${{ steps.test_config_git.outputs.client_config }}" == *"client: go-ethereum-gnosis"* ]] || exit 1
           [[ "${{ steps.test_config_git.outputs.client_config }}" == *"dockerfile: git"* ]] || exit 1
           [[ "${{ steps.test_config_git.outputs.client_config }}" == *"github: gnosischain/go-ethereum"* ]] || exit 1
-          [[ "${{ steps.test_config_git.outputs.client_config }}" == *"tag: v1.16.8-gc"* ]] || exit 1
+          [[ "${{ steps.test_config_git.outputs.client_config }}" == *"tag: release-1.17.1-gc"* ]] || exit 1
           [[ "${{ steps.test_config_git.outputs.client_config }}" == *"GOPROXY: https://proxy.golang.org"* ]] || exit 1
 
           echo "✅ Client config git output test passed"
@@ -276,7 +276,7 @@ jobs:
           [[ "${{ steps.test_config_docker.outputs.client_config }}" == *"client: go-ethereum-gnosis"* ]] || exit 1
           [[ "${{ steps.test_config_docker.outputs.client_config }}" != *"dockerfile: git"* ]] || exit 1
           [[ "${{ steps.test_config_docker.outputs.client_config }}" == *"baseimage: ghcr.io/gnosischain/geth"* ]] || exit 1
-          [[ "${{ steps.test_config_docker.outputs.client_config }}" == *"tag: v1.16.8-gc"* ]] || exit 1
+          [[ "${{ steps.test_config_docker.outputs.client_config }}" == *"tag: latest"* ]] || exit 1
 
           echo "✅ Client config docker output test passed"
 
