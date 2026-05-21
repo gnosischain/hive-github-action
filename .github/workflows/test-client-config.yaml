@@ -72,6 +72,12 @@ jobs:
           [[ "${{ steps.test_docker_defaults.outputs.geth_docker_registry }}" == "ghcr.io/gnosischain/geth" ]] || exit 1
           [[ "${{ steps.test_docker_defaults.outputs.geth_docker_tag }}" == "latest" ]] || exit 1
 
+          # Test reth docker outputs
+          echo "Reth docker registry: ${{ steps.test_docker_defaults.outputs.reth_docker_registry }}"
+          echo "Reth docker tag: ${{ steps.test_docker_defaults.outputs.reth_docker_tag }}"
+          [[ "${{ steps.test_docker_defaults.outputs.reth_docker_registry }}" == "ghcr.io/gnosischain/reth_gnosis" ]] || exit 1
+          [[ "${{ steps.test_docker_defaults.outputs.reth_docker_tag }}" == "latest" ]] || exit 1
+
           echo "✅ Docker defaults test passed"
 
   test-custom-git-versions:
@@ -179,7 +185,7 @@ jobs:
           [[ "${{ steps.test_common_tag_git.outputs.geth_tag }}" == "v2.0.0" ]] || exit 1
           [[ "${{ steps.test_common_tag_git.outputs.reth_tag }}" == "v2.0.0" ]] || exit 1
 
-          # Test that repo is still correct
+          # Test that repos are still correct
           echo "Geth repo: ${{ steps.test_common_tag_git.outputs.geth_repo }}"
           echo "Reth repo: ${{ steps.test_common_tag_git.outputs.reth_repo }}"
           [[ "${{ steps.test_common_tag_git.outputs.geth_repo }}" == "gnosischain/go-ethereum" ]] || exit 1
@@ -215,7 +221,7 @@ jobs:
           [[ "${{ steps.test_common_tag_docker.outputs.geth_docker_tag }}" == "v2.0.0" ]] || exit 1
           [[ "${{ steps.test_common_tag_docker.outputs.reth_docker_tag }}" == "v2.0.0" ]] || exit 1
 
-          # Test that registry is still correct
+          # Test that registries are still correct
           echo "Geth docker registry: ${{ steps.test_common_tag_docker.outputs.geth_docker_registry }}"
           echo "Reth docker registry: ${{ steps.test_common_tag_docker.outputs.reth_docker_registry }}"
           [[ "${{ steps.test_common_tag_docker.outputs.geth_docker_registry }}" == "ghcr.io/gnosischain/geth" ]] || exit 1
@@ -243,11 +249,11 @@ jobs:
           echo "Client config:"
           echo "${{ steps.test_config_git.outputs.client_config }}"
 
-          # Test that config contains expected elements for Gnosis clients
-          [[ "${{ steps.test_config_git.outputs.client_config }}" == *"client: go-ethereum-gnosis"* ]] || exit 1
+          # Test that config contains expected elements
+          [[ "${{ steps.test_config_git.outputs.client_config }}" == *"client: go-ethereum"* ]] || exit 1
           [[ "${{ steps.test_config_git.outputs.client_config }}" == *"dockerfile: git"* ]] || exit 1
           [[ "${{ steps.test_config_git.outputs.client_config }}" == *"github: gnosischain/go-ethereum"* ]] || exit 1
-          [[ "${{ steps.test_config_git.outputs.client_config }}" == *"tag: release-1.17.1-gc"* ]] || exit 1
+          [[ "${{ steps.test_config_git.outputs.client_config }}" == *"tag: release-1.17.3-gc"* ]] || exit 1
           [[ "${{ steps.test_config_git.outputs.client_config }}" == *"GOPROXY: https://proxy.golang.org"* ]] || exit 1
 
           echo "✅ Client config git output test passed"
@@ -272,8 +278,8 @@ jobs:
           echo "Client config:"
           echo "${{ steps.test_config_docker.outputs.client_config }}"
 
-          # Test that config contains expected elements for Gnosis clients
-          [[ "${{ steps.test_config_docker.outputs.client_config }}" == *"client: go-ethereum-gnosis"* ]] || exit 1
+          # Test that config contains expected elements
+          [[ "${{ steps.test_config_docker.outputs.client_config }}" == *"client: go-ethereum"* ]] || exit 1
           [[ "${{ steps.test_config_docker.outputs.client_config }}" != *"dockerfile: git"* ]] || exit 1
           [[ "${{ steps.test_config_docker.outputs.client_config }}" == *"baseimage: ghcr.io/gnosischain/geth"* ]] || exit 1
           [[ "${{ steps.test_config_docker.outputs.client_config }}" == *"tag: latest"* ]] || exit 1
@@ -325,7 +331,7 @@ jobs:
           echo "Raw JSON output:"
           echo "${{ toJson(steps.test_all_clients.outputs) }}"
 
-          # Test all Gnosis clients have outputs
+          # Test all clients have outputs
           clients=("geth" "reth" "nethermind" "erigon")
 
           for client in "${clients[@]}"; do
