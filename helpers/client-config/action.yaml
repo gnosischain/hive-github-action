@@ -19,8 +19,8 @@ inputs:
       {
         "geth": "ghcr.io/gnosischain/geth:latest",
         "reth": "ghcr.io/gnosischain/reth_gnosis:latest",
-        "nethermind": "docker.ethquokkaops.io/dh/ethpandaops/nethermind:master",
-        "erigon": "docker.ethquokkaops.io/dh/ethpandaops/erigon:main"
+        "nethermind": "nethermind/nethermind:latest",
+        "erigon": "erigontech/erigon:latest"
       }
   common_client_tag:
     description: 'If provided, this tag will be used for all clients, overriding individual tags/branches'
@@ -172,8 +172,8 @@ runs:
         declare -A CLIENT_IMAGE_DEFAULTS=(
           ["geth"]="ghcr.io/gnosischain/geth:latest"
           ["reth"]="ghcr.io/gnosischain/reth_gnosis:latest"
-          ["nethermind"]="docker.ethquokkaops.io/dh/ethpandaops/nethermind:master"
-          ["erigon"]="docker.ethquokkaops.io/dh/ethpandaops/erigon:main"
+          ["nethermind"]="nethermind/nethermind:latest"
+          ["erigon"]="erigontech/erigon:latest"
         )
 
         CLIENT_IMAGES='${{ inputs.client_images }}'

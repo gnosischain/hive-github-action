@@ -78,6 +78,18 @@ jobs:
           [[ "${{ steps.test_docker_defaults.outputs.reth_docker_registry }}" == "ghcr.io/gnosischain/reth_gnosis" ]] || exit 1
           [[ "${{ steps.test_docker_defaults.outputs.reth_docker_tag }}" == "latest" ]] || exit 1
 
+          # Test nethermind docker outputs
+          echo "Nethermind docker registry: ${{ steps.test_docker_defaults.outputs.nethermind_docker_registry }}"
+          echo "Nethermind docker tag: ${{ steps.test_docker_defaults.outputs.nethermind_docker_tag }}"
+          [[ "${{ steps.test_docker_defaults.outputs.nethermind_docker_registry }}" == "nethermind/nethermind" ]] || exit 1
+          [[ "${{ steps.test_docker_defaults.outputs.nethermind_docker_tag }}" == "latest" ]] || exit 1
+
+          # Test erigon docker outputs
+          echo "Erigon docker registry: ${{ steps.test_docker_defaults.outputs.erigon_docker_registry }}"
+          echo "Erigon docker tag: ${{ steps.test_docker_defaults.outputs.erigon_docker_tag }}"
+          [[ "${{ steps.test_docker_defaults.outputs.erigon_docker_registry }}" == "erigontech/erigon" ]] || exit 1
+          [[ "${{ steps.test_docker_defaults.outputs.erigon_docker_tag }}" == "latest" ]] || exit 1
+
           echo "✅ Docker defaults test passed"
 
   test-custom-git-versions:

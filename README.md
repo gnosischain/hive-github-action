@@ -76,7 +76,7 @@ env:
       nametag: prague-devnet-5
       dockerfile: git
       build_args:
-        github: ethpandaops/go-ethereum
+        github: gnosischain/go-ethereum
         tag: my-custom-branch
 ```
 
