@@ -7,7 +7,7 @@ inputs:
     required: false
     default: |
       {
-        "geth": "gnosischain/go-ethereum@release-1.17.1-gc",
+        "geth": "gnosischain/go-ethereum@release-1.17.3-gc",
         "reth": "gnosischain/reth_gnosis@master",
         "nethermind": "NethermindEth/nethermind@master",
         "erigon": "erigontech/erigon@main"
@@ -137,7 +137,7 @@ runs:
       run: |
         # Define client configurations
         declare -A CLIENT_DEFAULTS=(
-          ["geth"]="gnosischain/go-ethereum@release-1.17.1-gc"
+          ["geth"]="gnosischain/go-ethereum@release-1.17.3-gc"
           ["reth"]="gnosischain/reth_gnosis@master"
           ["nethermind"]="NethermindEth/nethermind@master"
           ["erigon"]="erigontech/erigon@main"
@@ -201,29 +201,29 @@ runs:
       if: inputs.client_source == 'git'
       shell: bash
       run: |
-        # Generate git client config for Gnosis clients
+        # Generate git client config
         cat << 'EOF' >> $GITHUB_OUTPUT
         config<<ENDCONFIG
-        - client: go-ethereum-gnosis
+        - client: go-ethereum
           nametag: default
           dockerfile: git
           build_args:
             github: ${{ steps.parse_git.outputs.geth_repo }}
             tag: ${{ steps.parse_git.outputs.geth_tag }}
             GOPROXY: ${{ inputs.goproxy }}
-        - client: reth-gnosis
+        - client: reth
           nametag: default
           dockerfile: git
           build_args:
             github: ${{ steps.parse_git.outputs.reth_repo }}
             tag: ${{ steps.parse_git.outputs.reth_tag }}
-        - client: nethermind-gnosis
+        - client: nethermind
           nametag: default
           dockerfile: git
           build_args:
             github: ${{ steps.parse_git.outputs.nethermind_repo }}
             tag: ${{ steps.parse_git.outputs.nethermind_tag }}
-        - client: erigon-gnosis
+        - client: erigon
           nametag: default
           dockerfile: git
           build_args:
@@ -237,25 +237,25 @@ runs:
       if: inputs.client_source == 'docker'
       shell: bash
       run: |
-        # Generate docker client config for Gnosis clients
+        # Generate docker client config
         cat << 'EOF' >> $GITHUB_OUTPUT
         config<<ENDCONFIG
-        - client: go-ethereum-gnosis
+        - client: go-ethereum
           nametag: default
           build_args:
             baseimage: ${{ steps.parse_docker.outputs.geth_docker_registry }}
             tag: ${{ steps.parse_docker.outputs.geth_docker_tag }}
-        - client: reth-gnosis
+        - client: reth
           nametag: default
           build_args:
             baseimage: ${{ steps.parse_docker.outputs.reth_docker_registry }}
             tag: ${{ steps.parse_docker.outputs.reth_docker_tag }}
-        - client: nethermind-gnosis
+        - client: nethermind
           nametag: default
           build_args:
             baseimage: ${{ steps.parse_docker.outputs.nethermind_docker_registry }}
             tag: ${{ steps.parse_docker.outputs.nethermind_docker_tag }}
-        - client: erigon-gnosis
+        - client: erigon
           nametag: default
           build_args:
             baseimage: ${{ steps.parse_docker.outputs.erigon_docker_registry }}

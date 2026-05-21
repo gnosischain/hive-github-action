@@ -4,14 +4,20 @@ This action is a wrapper around [Gnosis Hive](https://github.com/gnosischain/hiv
 
 > ⚠️ **Note:** This action is still under development and may introduce breaking changes. If you want to use it in your workflows, make sure to reference to a specific commit hash or tag/release.
 
-## Inputs
+## Used in
+
+Here are some examples of how this action is used in other repositories:
+
+- [`execution-specs/.github/workflows`](https://github.com/gnosischain/execution-specs/tree/forks/amsterdam/.github/workflows/hive-generic.yaml) - Runs some generic hive tests targeting the latest client releases and hive simulators.
+
+## Input
 
 ### Test Configuration
 
 | Input | Description | Required | Default |
 |-------|-------------|----------|---------|
 | `simulator` | Simulator to run (e.g. gnosis/sync) | Yes | `gnosis/sync` |
-| `client` | Client to test | Yes | `nethermind-gnosis` |
+| `client` | Client to test | Yes | `go-ethereum` |
 | `client_config` | Client configuration in YAML format | No | - |
 | `extra_flags` | Additional flags to pass to hive | No | - |
 | `skip_tests` | Skip tests. Useful when used together with input.website_upload = "true" to upload the website without running tests. | No | `false` |
@@ -35,7 +41,7 @@ This action is a wrapper around [Gnosis Hive](https://github.com/gnosischain/hiv
 | `gcs_public_url` | Public URL prefix for Hive UI. Used to generate links to detailed results in the summary. | No | `''` |
 | `rclone_version` | Rclone version to use | No | `latest` |
 | `rclone_config` | Base64 encoded rclone config file | No | - |
-| `website_upload` | Upload Hive View website to GCS | No | `true` |
+| `website_upload` | Upload Hive View website | No | `true` |
 | `website_listing_limit` | The amount of listings to generate for the website index | No | `2000` |
 | `website_index_generation` | (Re)generate the test results index for the website | No | `true` |
 
@@ -50,12 +56,12 @@ This action is a wrapper around [Gnosis Hive](https://github.com/gnosischain/hiv
 
 ## Examples
 
-### Simple example doing sync tests with the latest nethermind-gnosis
+### Simple example doing sync tests with the latest go-ethereum
 
 ```yaml
 - uses: gnosischain/hive-github-action@master
   with:
-    client: nethermind-gnosis
+    client: go-ethereum
     simulator: gnosis/sync
 ```
 
@@ -66,11 +72,11 @@ You can customize the [client configuration](https://github.com/gnosischain/hive
 ```yaml
 env:
   CLIENT_CONFIG: |
-    - client: nethermind-gnosis
+    - client: go-ethereum
       nametag: prague-devnet-5
       dockerfile: git
       build_args:
-        github: NethermindEth/nethermind
+        github: gnosischain/go-ethereum
         tag: my-custom-branch
 ```
 
@@ -79,16 +85,16 @@ Then you can use the `CLIENT_CONFIG` environment variable in your workflow.
 ```yaml
 - uses: gnosischain/hive-github-action@master
   with:
-    client: nethermind-gnosis
+    client: go-ethereum
     simulator: gnosis/sync
     client_config: ${{ env.CLIENT_CONFIG }}
 ```
 
 ### Uploading the results directory to GCS
 
-You'll need to create an rclone config for Google Cloud Storage and base64 encode it. Then store it as a GitHub Actions secret on your repository.
+You'll need to create an rclone config for Google Cloud Storage and base64 encode it. Then store it as a gitHub actions secret on your repository.
 
-An example rclone config for GCS using inline service account credentials:
+An example rclone config for GCS could look like this::
 
 ```toml
 # Content of rclone.conf
@@ -101,14 +107,14 @@ bucket_acl = private
 location = us-central1
 ```
 
-Then you can run `base64 -w 0 rclone.conf` (or `base64 -i rclone.conf` on macOS) and store the output as a GitHub Actions secret.
+Then you can run `base64 -w 0 rclone.conf` and store the output as a gitHub actions secret.
 
 Afterwards you just need to reference the secret for the `rclone_config` input.
 
 ```yaml
 - uses: gnosischain/hive-github-action@master
   with:
-    client: nethermind-gnosis
+    client: go-ethereum
     simulator: gnosis/sync
     client_config: ${{ env.CLIENT_CONFIG }}
     gcs_upload: true
@@ -136,7 +142,7 @@ This will upload the test results as a workflow artifact. By default the artifac
 ```yaml
 - uses: gnosischain/hive-github-action@master
   with:
-    client: nethermind-gnosis
+    client: go-ethereum
     simulator: gnosis/sync
     workflow_artifact_upload: true
     # workflow_artifact_prefix: my-custom-prefix

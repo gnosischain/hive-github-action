@@ -12,13 +12,13 @@ jobs:
       - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
       - uses: ./
         with:
-          client: nethermind-gnosis
+          client: go-ethereum
           simulator: gnosis/rpc-compat
           workflow_artifact_upload: true
           client_config: |
-            - client: nethermind-gnosis
-              nametag: nethermind-gnosis-main
+            - client: go-ethereum
+              nametag: go-ethereum-main
               dockerfile: git
               build_args:
-                github: NethermindEth/nethermind
-                tag: master
+                github: gnosischain/go-ethereum
+                tag: release-1.17.3-gc

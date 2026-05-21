@@ -13,7 +13,7 @@ inputs:
   client:
     description: 'Client to test'
     required: true
-    default: 'nethermind-gnosis'
+    default: 'go-ethereum'
   client_config:
     description: 'Client configuration in YAML format'
     required: false
