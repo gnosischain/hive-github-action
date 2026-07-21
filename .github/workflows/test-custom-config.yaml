@@ -21,4 +21,4 @@ jobs:
               dockerfile: git
               build_args:
                 github: gnosischain/go-ethereum
-                tag: release-1.17.3-gc
+                tag: release-1.17.4-gc

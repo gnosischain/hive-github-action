@@ -10,7 +10,7 @@ This composite action generates Hive client configuration based on input paramet
   with:
     client_repos: |
       {
-        "geth": "gnosischain/go-ethereum@release-1.17.3-gc",
+        "geth": "gnosischain/go-ethereum@release-1.17.4-gc",
         "reth": "gnosischain/reth_gnosis@master"
       }
     client_images: |
